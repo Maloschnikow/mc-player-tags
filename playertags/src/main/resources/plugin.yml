@@ -1,0 +1,20 @@
+name: playertags
+version: 0.0.1
+main: io.maloschnikow.playertags.PlayerTags
+description: Adds a player tags.
+author: Maloschnikow
+api-version: '1.21.1'
+
+permissions:
+
+  permissions.setOwnPlayerTag:
+    description: "Allows someone to use the /playertag command on themselves."
+    default: true
+
+  permissions.setCustomPlayerTag:
+    description: "Allows someone to use the /playertag command with a custom tag."
+    default: op
+
+  permissions.setOthersPlayerTag:
+    description: "Allows someone to use the /playertag command on another player."
+    default: op

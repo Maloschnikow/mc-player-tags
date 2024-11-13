@@ -1,0 +1,18 @@
+# Note on "defaults to":
+# The value specified will be applied, if the plugin can't find the value in this config file.
+# This happens when the values are set as comment, which is done with a "#" in front of the line.
+# This can be used to load the default values.
+
+
+
+# Specifies player tag presets
+# Player tags have this format: https://minecraft.wiki/w/Raw_JSON_text_format
+
+preset-player-tags:
+  admin:
+    format: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: permissions.adminTag
+
+  developer:
+    format: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: permissions.developerTag

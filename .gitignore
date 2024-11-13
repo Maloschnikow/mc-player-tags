@@ -1,0 +1,15 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# Ignore run directory because it has a minecraft server and therefore isn't permitted to publish
+run
+
+# Ignore bin directory
+bin
+
+# vscode stuff
+.vscode/*
+!.vscode/extensions.json
