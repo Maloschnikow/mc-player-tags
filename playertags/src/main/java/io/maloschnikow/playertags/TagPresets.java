@@ -8,10 +8,12 @@ import java.util.Set;
 import org.bukkit.plugin.Plugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minecraft.network.chat.TextColor;
 
 public final class TagPresets {
     public static Hashtable<String, Preset> tagHashTable = new Hashtable<String, Preset>();;
-    private static Plugin plugin;
+    public static Plugin plugin;
 
     public static void setPlugin(Plugin plugin) {
         TagPresets.plugin = plugin;
@@ -20,18 +22,21 @@ public final class TagPresets {
     //TODO typesafty and stuff, because prob the server will more or less crash when config.yml is not correctly configured
 
     public static void loadPresetsFromConfig() {
-        /* List<LinkedHashMap<?, ?>> presetList = (List<LinkedHashMap<?, ?>>) plugin.getConfig().getList("preset-player-tags");
+        List<LinkedHashMap<?, ?>> presetList = (List<LinkedHashMap<?, ?>>) plugin.getConfig().getList("preset-player-tags");
         for(LinkedHashMap<?, ?> preset : presetList) {
             
-            String presetName = (String) preset.get(0);
-            Component presetComponent = (Component) preset.get(1);
-            String presetPermission = (String) preset.get(2);
+            String presetName = (String) preset.get("name");
+            String presetComponent = (String) preset.get("tag");
+            String presetPermission = (String) preset.get("permission");
             if ( presetName != null ) {
                 tagHashTable.put(presetName, new Preset(presetName, presetComponent, presetPermission));
             }
-        } */
-        tagHashTable.put("admin", new Preset("admin", "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]", "permissions.adminTag"));
-        tagHashTable.put("developer", new Preset("developer", "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]", "permissions.adminTag"));
+
+            //plugin.getLogger().info(presetList.toString());
+            //plugin.getLogger().info(preset.get("name").toString());
+            
+            //plugin.getLogger().info(preset.getClass().toString());
+        }
 
     }
 

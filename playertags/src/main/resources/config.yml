@@ -7,14 +7,21 @@
 
 # Specifies player tag presets
 # Player tags have this format: https://minecraft.wiki/w/Raw_JSON_text_format
+# Note
 
 preset-player-tags:
-  - preset1: 
-    - "admin"
-    - [{"text":"[","color":"gray","bold":false},{"text":"Admin","color":"red","bold":false},{"text":"]","color":"gray","bold":false}]
-    - "permissions.adminTag"
+  - name: admin
+    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: permissions.adminTag
 
-  - preset2: 
-    - "developer"
-    - [{"text":"[","color":"gray","bold":false},{"text":"Developer","color":"yellow","bold":false},{"text":"]","color":"gray","bold":false}]
-    - permissions.developerTag
+  - name: developer
+    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: permissions.developerTag
+  
+  - name: live
+    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Live\",\"color\":\"dark_purple\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: none
+
+  - name: video
+    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Video\",\"color\":\"blue\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    permission: none

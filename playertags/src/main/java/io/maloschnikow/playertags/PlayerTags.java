@@ -6,6 +6,8 @@ import org.bukkit.plugin.Plugin;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 
@@ -18,6 +20,9 @@ public class PlayerTags extends JavaPlugin {
         saveDefaultConfig();
 
         TagPresets.setPlugin(this);
+
+        this.getLogger().info("TagPresets.plugin=" + TagPresets.plugin);
+
         TagPresets.loadPresetsFromConfig();
         
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();

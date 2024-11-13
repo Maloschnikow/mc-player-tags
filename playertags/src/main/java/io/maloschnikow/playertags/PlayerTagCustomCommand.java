@@ -74,7 +74,7 @@ public class PlayerTagCustomCommand implements Command<CommandSourceStack> {
         //send success message to command sender
         PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
         targetPlayer.sendMessage(
-            plainTextComponentSerializer.deserialize("Du wirst jetzt angezeigt als: \"").append(
+            plainTextComponentSerializer.deserialize("You will now be displayed as: \"").append(
                 displayName
             ).append(
                 plainTextComponentSerializer.deserialize("\"")

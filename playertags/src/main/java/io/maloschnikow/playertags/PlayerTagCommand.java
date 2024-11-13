@@ -13,6 +13,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -33,15 +34,28 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
 
         CommandSender sender = stack.getSender();
 
+        //get preset tag
+        Preset preset = context.getArgument("tag", Preset.class);
+        String requiredPermission = preset.getPermission();
+
         //get targetPlayer argument
         PlayerSelectorArgumentResolver playerResolver = context.getArgument("player", PlayerSelectorArgumentResolver.class); 
         Player targetPlayer = playerResolver.resolve(stack).getFirst();
 
-        //check if command executer is different than targetPlayer
-        //if so, check if they have permission to change other peoples tag
+        
+        //check 
         if ( sender instanceof Player) {
             Player executer = (Player) sender;
-            if (executer.getUniqueId() == targetPlayer.getUniqueId()) {
+
+            //check is targetPlayer has permission to use the tag
+            if ( !requiredPermission.isBlank() && !requiredPermission.contains("none") && !executer.hasPermission(new Permission(requiredPermission))){
+                executer.sendMessage(targetPlayer.getName() + " doesn't have permission to use this tag.");
+                return Command.SINGLE_SUCCESS;
+            }
+
+            //check if command executer is different than targetPlayer
+            //check if they have permission to change other peoples tag
+            if (executer.getUniqueId() != targetPlayer.getUniqueId()) {
                 if (!executer.hasPermission( new Permission("permissions.setOtherPlayerTag") )) {
                     executer.sendMessage("You can not set another player's tag");
                     return Command.SINGLE_SUCCESS;
@@ -49,13 +63,11 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
             }
         }
 
-        //get tag
-        String presetTag = context.getArgument("tag", Preset.class).getTagComponentString();
+        //get tag string
+        String presetTag = preset.getTagComponentString();
 
         GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
         Component tag = gsonComponentSerializer.deserialize(presetTag);
-        
-
         
         //format the new display name
         Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}"); //"{\"text\":\" " + targetPlayer.getName() + "
@@ -75,7 +87,7 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         //send success message to command sender
         PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
         targetPlayer.sendMessage(
-            plainTextComponentSerializer.deserialize("Du wirst jetzt angezeigt als: \"").append(
+            plainTextComponentSerializer.deserialize("You will now be displayed as: \"").append(
                 displayName
             ).append(
                 plainTextComponentSerializer.deserialize("\"")
