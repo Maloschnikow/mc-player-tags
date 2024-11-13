@@ -7,14 +7,14 @@ api-version: '1.21.1'
 
 permissions:
 
-  permissions.setOwnPlayerTag:
-    description: "Allows someone to use the /playertag command on themselves."
+  permissions.setPlayerTag:
+    description: "Allows someone to apply a tag command. (/playertag)"
     default: true
 
-  permissions.setCustomPlayerTag:
-    description: "Allows someone to use the /playertag command with a custom tag."
+  permissions.customPlayerTag:
+    description: "Allows someone to apply a custom tag. (/playertagcustom)"
     default: op
 
-  permissions.setOthersPlayerTag:
-    description: "Allows someone to use the /playertag command on another player."
+  permissions.setOtherPlayerTag:
+    description: "Allows someone to apply a tag to another player."
     default: op

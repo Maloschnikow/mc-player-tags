@@ -9,10 +9,12 @@
 # Player tags have this format: https://minecraft.wiki/w/Raw_JSON_text_format
 
 preset-player-tags:
-  admin:
-    format: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
-    permission: permissions.adminTag
+  - preset1: 
+    - "admin"
+    - [{"text":"[","color":"gray","bold":false},{"text":"Admin","color":"red","bold":false},{"text":"]","color":"gray","bold":false}]
+    - "permissions.adminTag"
 
-  developer:
-    format: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
-    permission: permissions.developerTag
+  - preset2: 
+    - "developer"
+    - [{"text":"[","color":"gray","bold":false},{"text":"Developer","color":"yellow","bold":false},{"text":"]","color":"gray","bold":false}]
+    - permissions.developerTag

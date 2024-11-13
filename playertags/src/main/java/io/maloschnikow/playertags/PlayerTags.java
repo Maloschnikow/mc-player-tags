@@ -2,8 +2,6 @@ package io.maloschnikow.playertags;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import org.bukkit.plugin.Plugin;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
@@ -18,10 +16,14 @@ public class PlayerTags extends JavaPlugin {
     public void onEnable() {
 
         saveDefaultConfig();
+
+        TagPresets.setPlugin(this);
+        TagPresets.loadPresetsFromConfig();
         
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands commands = event.registrar();
+
 
             // Register /playertag command
             commands.register(
@@ -29,16 +31,30 @@ public class PlayerTags extends JavaPlugin {
                 .then(
                     Commands.argument("player", ArgumentTypes.player())
                     .then(
-                        Commands.argument("type", new TagTypeArgument()).requires(new Permission("permissions.setCustomPlayerTag"))
-                        .then(
-                            Commands.argument("tag", ArgumentTypes.component())
-                            .executes(new PlayerTagCommand(this))
-                        )
+                        Commands.argument("tag", new TagPresetsArgument())
+                        .executes(new PlayerTagCommand(this))
                     )
                     .executes(new PlayerTagCommand(this))
                 )
+                .requires(new Permission("permissions.setPlayerTag"))
                 .build(),
-                "Set a tag of a player."
+                "Apply a tag to a player."
+            );
+
+            // Register /playertagcustom command
+            commands.register(
+                Commands.literal("playertagcustom")
+                .then(
+                    Commands.argument("player", ArgumentTypes.player())
+                    .then(
+                        Commands.argument("tag", ArgumentTypes.component())
+                        .executes(new PlayerTagCustomCommand(this))
+                    )
+                    .executes(new PlayerTagCustomCommand(this))
+                )
+                .requires(new Permission("permissions.customPlayerTag"))
+                .build(),
+                "Apply a custom tag to a player. (https://minecraft.wiki/w/Raw_JSON_text_format)"
             );
         });
     }

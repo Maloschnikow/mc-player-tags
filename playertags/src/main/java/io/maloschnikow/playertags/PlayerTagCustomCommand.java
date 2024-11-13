@@ -18,11 +18,14 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 
-public class PlayerTagCommand implements Command<CommandSourceStack> {
+
+
+
+public class PlayerTagCustomCommand implements Command<CommandSourceStack> {
 
     private final Plugin plugin;
 
-    public PlayerTagCommand(Plugin plugin) {
+    public PlayerTagCustomCommand(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -50,14 +53,10 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         }
 
         //get tag
-        String presetTag = context.getArgument("tag", Preset.class).getTagComponentString();
-
-        GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
-        Component tag = gsonComponentSerializer.deserialize(presetTag);
-        
-
+        Component tag = context.getArgument("tag", Component.class);
         
         //format the new display name
+        GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
         Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}"); //"{\"text\":\" " + targetPlayer.getName() + "
         playerNameAsTextComponent = playerNameAsTextComponent.color(NamedTextColor.WHITE)
                                     .decoration(TextDecoration.BOLD, false)

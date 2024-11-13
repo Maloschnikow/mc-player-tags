@@ -1,6 +1,5 @@
 package io.maloschnikow.playertags;
 
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +18,12 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-/* public class TagPresetArgument implements CustomArgumentType.Converted<TagPreset, String> {
+public class TagPresetsArgument implements CustomArgumentType.Converted<Preset, String> {
 
     @Override
-    public @NotNull TagPreset convert(String nativeType) throws CommandSyntaxException {
+    public @NotNull Preset convert(String nativeType) throws CommandSyntaxException {
         try {
-            return TagPreset.valueOf(nativeType); //todo string in TagPreset
+            return TagPresets.valueOf(nativeType);
         } catch (IllegalArgumentException ignored) {
             Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid flavor %s!".formatted(nativeType), NamedTextColor.RED));
 
@@ -39,11 +38,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (TagPreset flavor : TagPreset.values()) {
-            builder.suggest(flavor.name(), MessageComponentSerializer.message().serialize(Component.text("You can choose from these available presets", NamedTextColor.GREEN)));
+        for (String flavorKey : TagPresets.values()) {
+            String flavorName = TagPresets.valueOf(flavorKey).getName();
+            builder.suggest(flavorName, MessageComponentSerializer.message().serialize(Component.text("Chose a preset tag!", NamedTextColor.YELLOW)));
         }
 
         return builder.buildFuture();
     }
-} */
-
+}
