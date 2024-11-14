@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Preset implements Comparable<Preset> {
 
-    //todo make serialize
+    //TODO make serialize
 
     private final String name;
     private final String tagComponentString;

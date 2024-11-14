@@ -33,21 +33,21 @@ display-multiple-tags: false
 
 preset-player-tags:
   - name: admin
-    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    tag: "{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false}"
     permission: permissions.adminTag
     priority: 0
 
   - name: developer
-    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    tag: "{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false}"
     permission: permissions.developerTag
     priority: 1
   
   - name: live
-    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Live\",\"color\":\"dark_purple\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    tag: "{\"text\":\"Live\",\"color\":\"dark_purple\",\"bold\":true}"
     permission: none
     priority: 10
 
   - name: video
-    tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Video\",\"color\":\"blue\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
+    tag: "{\"text\":\"Video\",\"color\":\"blue\",\"bold\":true}"
     permission: none
     priority: 11

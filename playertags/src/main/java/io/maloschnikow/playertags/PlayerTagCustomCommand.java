@@ -48,7 +48,7 @@ public class PlayerTagCustomCommand implements Command<CommandSourceStack> {
             }
         }
 
-        //todo check if tag is equal to a preset tag and prevent applying if so
+        //TODO check if tag is equal to a preset tag and prevent applying if so
 
         //get tag
         Component tag = context.getArgument("tag", Component.class);
