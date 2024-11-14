@@ -1,8 +1,11 @@
 package io.maloschnikow.playertags;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.Command;
@@ -13,7 +16,6 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -79,8 +81,13 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
                                     .decoration(TextDecoration.UNDERLINED, false);
         
         Component displayName = tag.append(playerNameAsTextComponent);
+        String displayNameString = gsonComponentSerializer.serialize(displayName);
 
         //apply tag
+
+        PersistentDataContainer targetPlayerDataContainer = targetPlayer.getPersistentDataContainer();
+        targetPlayerDataContainer.set(new NamespacedKey(plugin, "displayName"), PersistentDataType.STRING, displayNameString);
+
         targetPlayer.displayName(displayName);
         targetPlayer.playerListName(displayName);
 

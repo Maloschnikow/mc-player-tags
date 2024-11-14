@@ -6,24 +6,31 @@ import org.bukkit.plugin.Plugin;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 
 
 public class PlayerTags extends JavaPlugin {
 
+    private static PlayerTags plugin;
+
+    public static PlayerTags getPlugin() {
+        return plugin;
+    }
+
     @Override
     public void onEnable() {
+        plugin = this;
 
         saveDefaultConfig();
 
-        TagPresets.setPlugin(this);
-
         this.getLogger().info("TagPresets.plugin=" + TagPresets.plugin);
 
+        //load preset tags required for autocompletion of /playertag
         TagPresets.loadPresetsFromConfig();
+
+        //register Event Handler(s)
+        getServer().getPluginManager().registerEvents(new ApplyPlayerTagOnJoinListener(), this);
         
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
@@ -53,9 +60,9 @@ public class PlayerTags extends JavaPlugin {
                     Commands.argument("player", ArgumentTypes.player())
                     .then(
                         Commands.argument("tag", ArgumentTypes.component())
-                        .executes(new PlayerTagCustomCommand(this))
+                        .executes(new PlayerTagCustomCommand())
                     )
-                    .executes(new PlayerTagCustomCommand(this))
+                    .executes(new PlayerTagCustomCommand())
                 )
                 .requires(new Permission("permissions.customPlayerTag"))
                 .build(),

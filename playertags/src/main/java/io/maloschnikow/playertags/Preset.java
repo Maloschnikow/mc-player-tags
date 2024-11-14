@@ -1,7 +1,5 @@
 package io.maloschnikow.playertags;
 
-import net.kyori.adventure.text.Component;
-
 public class Preset {
 
     private final String name;

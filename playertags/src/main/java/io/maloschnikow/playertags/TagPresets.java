@@ -7,17 +7,9 @@ import java.util.Set;
 
 import org.bukkit.plugin.Plugin;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minecraft.network.chat.TextColor;
-
 public final class TagPresets {
     public static Hashtable<String, Preset> tagHashTable = new Hashtable<String, Preset>();;
-    public static Plugin plugin;
-
-    public static void setPlugin(Plugin plugin) {
-        TagPresets.plugin = plugin;
-    }
+    public static Plugin plugin = PlayerTags.getPlugin();
 
     //TODO typesafty and stuff, because prob the server will more or less crash when config.yml is not correctly configured
 

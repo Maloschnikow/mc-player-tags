@@ -23,11 +23,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PlayerTagCustomCommand implements Command<CommandSourceStack> {
 
-    private final Plugin plugin;
-
-    public PlayerTagCustomCommand(Plugin plugin) {
-        this.plugin = plugin;
-    }
+    private final Plugin plugin = PlayerTags.getPlugin();
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
