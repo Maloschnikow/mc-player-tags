@@ -44,9 +44,9 @@ public class PlayerTags extends JavaPlugin {
                     Commands.argument("player", ArgumentTypes.player())
                     .then(
                         Commands.argument("tag", new TagPresetsArgument())
-                        .executes(new PlayerTagCommand(this))
+                        .executes(new PlayerTagCommand())
                     )
-                    .executes(new PlayerTagCommand(this))
+                    .executes(new PlayerTagCommand())
                 )
                 .requires(new Permission("permissions.setPlayerTag"))
                 .build(),
@@ -67,6 +67,18 @@ public class PlayerTags extends JavaPlugin {
                 .requires(new Permission("permissions.customPlayerTag"))
                 .build(),
                 "Apply a custom tag to a player. (https://minecraft.wiki/w/Raw_JSON_text_format)"
+            );
+
+            // Register /playertagclear command
+            commands.register(
+                Commands.literal("playertagclear")
+                .then(
+                    Commands.argument("player", ArgumentTypes.player())
+                    .executes(new PlayerTagClearCommand())
+                )
+                .requires(new Permission("permissions.clearPlayerTag"))
+                .build(),
+                "Apply a tag to a player."
             );
         });
     }

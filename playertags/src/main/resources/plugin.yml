@@ -11,6 +11,10 @@ permissions:
     description: "Allows someone to apply a tag command. (/playertag)"
     default: true
 
+  permissions.clearPlayerTag:
+    description: "Allows someone to clear a player's tag."
+    default: true
+
   permissions.customPlayerTag:
     description: "Allows someone to apply a custom tag. (/playertagcustom)"
     default: op
@@ -18,3 +22,4 @@ permissions:
   permissions.setOtherPlayerTag:
     description: "Allows someone to apply a tag to another player."
     default: op
+

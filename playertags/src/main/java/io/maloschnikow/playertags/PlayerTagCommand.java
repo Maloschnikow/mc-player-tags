@@ -31,15 +31,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PlayerTagCommand implements Command<CommandSourceStack> {
 
-    private final Plugin plugin;
-
-    public PlayerTagCommand(Plugin plugin) {
-        this.plugin = plugin;
-    }
-
-    public static void applyTagsToPlayer(Player player, List<Preset> tagList) {
-
-    }
+    private final Plugin plugin = PlayerTags.getPlugin();
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
