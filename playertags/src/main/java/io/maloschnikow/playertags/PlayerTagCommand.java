@@ -97,7 +97,7 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
 
         
         //get the player name as text component (note: player team colors will get lost)
-        Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}"); //"{\"text\":\" " + targetPlayer.getName() + "
+        Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}");
         playerNameAsTextComponent           = playerNameAsTextComponent.color(NamedTextColor.WHITE)
                                                 .decoration(TextDecoration.BOLD, false)
                                                 .decoration(TextDecoration.ITALIC, false)
