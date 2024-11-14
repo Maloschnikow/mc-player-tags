@@ -20,16 +20,11 @@ public final class TagPresets {
             String presetName = (String) preset.get("name");
             String presetComponent = (String) preset.get("tag");
             String presetPermission = (String) preset.get("permission");
+            int presetPriority = (int) preset.get("priority");
             if ( presetName != null ) {
-                tagHashTable.put(presetName, new Preset(presetName, presetComponent, presetPermission));
+                tagHashTable.put(presetName, new Preset(presetName, presetComponent, presetPermission, presetPriority));
             }
-
-            //plugin.getLogger().info(presetList.toString());
-            //plugin.getLogger().info(preset.get("name").toString());
-            
-            //plugin.getLogger().info(preset.getClass().toString());
         }
-
     }
 
     public static Preset valueOf(String presetName) {
@@ -39,7 +34,4 @@ public final class TagPresets {
     public static Set<String> values() {
         return tagHashTable.keySet();
     }
-
-
-
 }

@@ -30,7 +30,7 @@ public class PlayerTags extends JavaPlugin {
         TagPresets.loadPresetsFromConfig();
 
         //register Event Handler(s)
-        getServer().getPluginManager().registerEvents(new ApplyPlayerTagOnJoinListener(), this);
+        //getServer().getPluginManager().registerEvents(new ApplyPlayerTagOnJoinListener(), this);
         
         LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {

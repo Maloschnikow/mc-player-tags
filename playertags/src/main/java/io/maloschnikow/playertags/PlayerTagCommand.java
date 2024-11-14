@@ -1,5 +1,11 @@
 package io.maloschnikow.playertags;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,12 +35,18 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         this.plugin = plugin;
     }
 
+    public static void applyTagsToPlayer(Player player, List<Preset> tagList) {
+
+    }
+
+
+
+
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
         CommandSourceStack stack = (CommandSourceStack) context.getSource();
-
-        CommandSender sender = stack.getSender();
+        CommandSender sender     = stack.getSender();
 
         //get preset tag
         Preset preset = context.getArgument("tag", Preset.class);
@@ -68,28 +80,76 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         //get tag string
         String presetTag = preset.getTagComponentString();
 
-        GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
-        Component tag = gsonComponentSerializer.deserialize(presetTag);
-        
-        //format the new display name
-        Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}"); //"{\"text\":\" " + targetPlayer.getName() + "
-        playerNameAsTextComponent = playerNameAsTextComponent.color(NamedTextColor.WHITE)
-                                    .decoration(TextDecoration.BOLD, false)
-                                    .decoration(TextDecoration.ITALIC, false)
-                                    .decoration(TextDecoration.OBFUSCATED, false)
-                                    .decoration(TextDecoration.STRIKETHROUGH, false)
-                                    .decoration(TextDecoration.UNDERLINED, false);
-        
-        Component displayName = tag.append(playerNameAsTextComponent);
-        String displayNameString = gsonComponentSerializer.serialize(displayName);
-
-        //apply tag
-
+        //get tags, which are already stored in player
         PersistentDataContainer targetPlayerDataContainer = targetPlayer.getPersistentDataContainer();
-        targetPlayerDataContainer.set(new NamespacedKey(plugin, "displayName"), PersistentDataType.STRING, displayNameString);
+        String playerTagListAsString = targetPlayerDataContainer.get(new NamespacedKey(plugin, "playerTagList"), PersistentDataType.STRING);
+        List<String> playerTagStringList;
+        
+        //add tag from command to player's tags
+        if(playerTagListAsString == null) {
+            playerTagStringList = new LinkedList<String>();
+        } else {
+            playerTagStringList = new LinkedList<String>( Arrays.asList(playerTagListAsString.split("§")) );
+        }
+        plugin.getLogger().info(playerTagStringList.toString()); //todo remove debug lines
+        plugin.getLogger().info(Preset.deserialize(preset));
 
+        playerTagStringList.add(Preset.deserialize(preset));
+
+        //Serialize tags
+        List<Preset> playerTagList = new ArrayList<Preset>();
+        for (String tagString : playerTagStringList) {
+            playerTagList.add(Preset.serialize(tagString));
+        }
+        
+        //Get tag start, sepeator and end characters from config
+        String tagStartChar     = plugin.getConfig().getString("tag-start-char", "{\"text\":\"[\",\"color\":\"gray\",\"bold\":false}");
+        String tagEndChar       = plugin.getConfig().getString("tag-end-char",     "{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}");
+        String tagSeperatorChar = plugin.getConfig().getString("tag-seperator-char", "{\"text\":\"/\",\"color\":\"gray\",\"bold\":false}");
+
+
+
+        GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
+        Component tagArg = gsonComponentSerializer.deserialize(presetTag);
+        
+        //get the player name as text component (note: player team colors will get lost)
+        Component playerNameAsTextComponent = gsonComponentSerializer.deserialize("{\"text\":\" " + targetPlayer.getName() + "\"}"); //"{\"text\":\" " + targetPlayer.getName() + "
+        playerNameAsTextComponent           = playerNameAsTextComponent.color(NamedTextColor.WHITE)
+                                                .decoration(TextDecoration.BOLD, false)
+                                                .decoration(TextDecoration.ITALIC, false)
+                                                .decoration(TextDecoration.OBFUSCATED, false)
+                                                .decoration(TextDecoration.STRIKETHROUGH, false)
+                                                .decoration(TextDecoration.UNDERLINED, false);
+
+        //todo check if multiple tags need to be displayed
+
+        //todo check if tag is already applied
+
+        //sort playerTagList by priority
+        Collections.sort(playerTagList);
+
+        //Construct display name
+        Component displayName = gsonComponentSerializer.deserialize(tagStartChar); //Begin with tag start char
+        
+        for (int i = 0; i < playerTagList.size(); ++i) {
+            Component tagComponent = gsonComponentSerializer.deserialize(playerTagList.get(i).getTagComponentString());
+            displayName = displayName.append(tagComponent);
+            //Apply tag seperator
+            if (i < playerTagList.size() - 1) {
+                displayName = displayName.append(gsonComponentSerializer.deserialize(tagSeperatorChar));
+            }
+        }
+        displayName = displayName.append(gsonComponentSerializer.deserialize(tagEndChar)); //End with tag end char
+        displayName = displayName.append(playerNameAsTextComponent);
+
+        // Apply player tags
         targetPlayer.displayName(displayName);
         targetPlayer.playerListName(displayName);
+
+        //Store tags in player
+        playerTagListAsString = String.join("§", playerTagStringList);
+        targetPlayerDataContainer.set(new NamespacedKey(plugin, "playerTagList"), PersistentDataType.STRING, playerTagListAsString);
+
 
         //send success message to command sender
         PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();

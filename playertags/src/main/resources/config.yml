@@ -4,24 +4,50 @@
 # This can be used to load the default values.
 
 
+# Tag start character(s)
+# use this format: https://minecraft.wiki/w/Raw_JSON_text_format
+# defaults to "{\"text\":\"[\",\"color\":\"gray\"}"
+tag-start-char: "{\"text\":\"[\",\"color\":\"gray\",\"bold\":false}"
+
+# Tag end character(s)
+# use this format: https://minecraft.wiki/w/Raw_JSON_text_format
+# dedaults to "{\"text\":\"]\",\"color\":\"gray\"}"
+tag-end-char: "{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}"
+
+# Tag seperator character(s)
+# use this format: https://minecraft.wiki/w/Raw_JSON_text_format
+# defaults to "{\"text\":\"/\",\"color\":\"gray\"}"
+tag-seperator-char: "{\"text\":\"/\",\"color\":\"gray\",\"bold\":false}"
+
+# display multiple tags
+# true:  tags will be seperated by tag-seperator-char and displayed in order of priority
+# false: only teh tag with the highest priority is displayed
+display-multiple-tags: false
 
 # Specifies player tag presets
-# Player tags have this format: https://minecraft.wiki/w/Raw_JSON_text_format
-# Note
+# a player tag consists of
+#   name (string) - the name of the tag (must be unique)
+#   tag (string)  - how the tag looks like (https://minecraft.wiki/w/Raw_JSON_text_format)
+#   permission    - what permission is required to use this tag
+#   priority      - if a player has more than one tag the tags will be sorted according to this (0 is highest priority)
 
 preset-player-tags:
   - name: admin
     tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Admin\",\"color\":\"red\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
     permission: permissions.adminTag
+    priority: 0
 
   - name: developer
     tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Developer\",\"color\":\"yellow\",\"bold\":false},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
     permission: permissions.developerTag
+    priority: 1
   
   - name: live
     tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Live\",\"color\":\"dark_purple\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
     permission: none
+    priority: 10
 
   - name: video
     tag: "[{\"text\":\"[\",\"color\":\"gray\",\"bold\":false},{\"text\":\"Video\",\"color\":\"blue\",\"bold\":true},{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}]"
     permission: none
+    priority: 11
