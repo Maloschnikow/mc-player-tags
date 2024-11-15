@@ -18,12 +18,12 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-public class TagPresetsArgument implements CustomArgumentType.Converted<Preset, String> {
+public class TagPresetsArgument implements CustomArgumentType.Converted<TagPreset, String> {
 
     @Override
-    public @NotNull Preset convert(String nativeType) throws CommandSyntaxException {
+    public @NotNull TagPreset convert(String nativeType) throws CommandSyntaxException {
         try {
-            return TagPresets.valueOf(nativeType);
+            return AvailableTagPresets.valueOf(nativeType);
         } catch (IllegalArgumentException ignored) {
             Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid flavor %s!".formatted(nativeType), NamedTextColor.RED));
 
@@ -38,8 +38,8 @@ public class TagPresetsArgument implements CustomArgumentType.Converted<Preset, 
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (String flavorKey : TagPresets.values()) {
-            String flavorName = TagPresets.valueOf(flavorKey).getName();
+        for (String flavorKey : AvailableTagPresets.values()) {
+            String flavorName = AvailableTagPresets.valueOf(flavorKey).getName();
             builder.suggest(flavorName, MessageComponentSerializer.message().serialize(Component.text("Chose a preset tag!", NamedTextColor.YELLOW)));
         }
 

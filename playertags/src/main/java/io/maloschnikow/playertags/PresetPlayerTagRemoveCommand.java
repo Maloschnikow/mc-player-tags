@@ -27,9 +27,22 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 
-public class PlayerTagCommand implements Command<CommandSourceStack> {
+public class PresetPlayerTagRemoveCommand implements Command<CommandSourceStack> {
 
     private final Plugin plugin = PlayerTags.getPlugin();
+
+
+    private void sendVerificationMessage(Player player) {
+        PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
+        player.sendMessage(
+            plainTextComponentSerializer.deserialize("You will now be displayed as: \"").append(
+                player.displayName()
+            ).append(
+                plainTextComponentSerializer.deserialize("\"")
+            )
+        );
+    }
+
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -38,9 +51,8 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         CommandSourceStack stack = (CommandSourceStack) context.getSource();
         CommandSender sender     = stack.getSender();
 
-        //get preset tag
-        Preset preset = context.getArgument("tag", Preset.class);
-        String requiredPermission = preset.getPermission();
+        //get preset tag to be removed
+        TagPreset preset = context.getArgument("tag", TagPreset.class);
 
         //get targetPlayer argument
         PlayerSelectorArgumentResolver playerResolver = context.getArgument("player", PlayerSelectorArgumentResolver.class); 
@@ -50,12 +62,6 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         //check if sender is player
         if ( sender instanceof Player) {
             Player executer = (Player) sender;
-
-            //check is targetPlayer has permission to use the tag
-            if ( !requiredPermission.isBlank() && !requiredPermission.contains("none") && !executer.hasPermission(new Permission(requiredPermission))){
-                executer.sendMessage(targetPlayer.getName() + " doesn't have permission to use this tag.");
-                return Command.SINGLE_SUCCESS;
-            }
 
             //check if command executer is different than targetPlayer
             //check if they have permission to change other peoples tag
@@ -80,18 +86,28 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
         }
 
         //Serialize tags
-        TreeSet<Preset> playerTags = new TreeSet<Preset>(); //TreeSet sorts automatically and values are unique
+        TreeSet<TagPreset> playerTags = new TreeSet<TagPreset>(); //TreeSet sorts automatically and values are unique
         for (String tagString : playerTagStringList) {
-            Preset tag = Preset.serialize(tagString);
+            TagPreset tag = TagPreset.serialize(tagString);
             playerTags.add(tag);
         }
-        //check if tag is already in playerTags
-        if(playerTags.contains(preset)) {
-            sender.sendMessage(targetPlayer.getName() + " already has this tag applied.");
+
+        //check if tag is not in playerTags
+        if(!playerTags.contains(preset)) {
+            sender.sendMessage(targetPlayer.getName() + " doesn't have this tag applied.");
             return Command.SINGLE_SUCCESS;
         }
-        //add tag of command to TreeSet
-        playerTags.add(preset);
+        //remove tag of command from TreeSet
+        playerTags.remove(preset);
+
+        //check if playerTags are empty and reset display and list name
+        if (playerTags.isEmpty()) {
+            targetPlayer.displayName(null);
+            targetPlayer.playerListName(null);
+            targetPlayerDataContainer.remove(new NamespacedKey(plugin, "playerTagList"));
+            sendVerificationMessage(targetPlayer);
+            return Command.SINGLE_SUCCESS;
+        }
         
         //Get tag start, sepeator and end characters from config
         String tagStartChar     = plugin.getConfig().getString("tag-start-char", "{\"text\":\"[\",\"color\":\"gray\",\"bold\":false}");
@@ -113,7 +129,7 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
 
         //Construct display name
         Component displayName = gsonComponentSerializer.deserialize(tagStartChar); //Begin with tag start char
-        List<Preset> playerTagsList = new ArrayList<Preset>(playerTags);
+        List<TagPreset> playerTagsList = new ArrayList<TagPreset>(playerTags);
 
 
         //Construct display name with multiple player tags
@@ -139,8 +155,8 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
 
         //Deserilize TreeSet of playerTags
         playerTagStringList.clear();
-        for(Preset p : playerTags) {
-            String pStr = Preset.deserialize(p);
+        for(TagPreset p : playerTags) {
+            String pStr = TagPreset.deserialize(p);
             playerTagStringList.add(pStr);
         }
         
@@ -150,14 +166,8 @@ public class PlayerTagCommand implements Command<CommandSourceStack> {
 
 
         //send success message to command sender
-        PlainTextComponentSerializer plainTextComponentSerializer = PlainTextComponentSerializer.plainText();
-        targetPlayer.sendMessage(
-            plainTextComponentSerializer.deserialize("You will now be displayed as: \"").append(
-                displayName
-            ).append(
-                plainTextComponentSerializer.deserialize("\"")
-            )
-        );
+        sendVerificationMessage(targetPlayer);
+        
         return Command.SINGLE_SUCCESS;
     }
 }

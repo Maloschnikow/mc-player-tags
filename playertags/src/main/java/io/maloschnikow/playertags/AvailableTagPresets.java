@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.bukkit.plugin.Plugin;
 
-public final class TagPresets {
-    public static Hashtable<String, Preset> tagHashTable = new Hashtable<String, Preset>();;
+public final class AvailableTagPresets {
+    public static Hashtable<String, TagPreset> tagHashTable = new Hashtable<String, TagPreset>();;
     public static Plugin plugin = PlayerTags.getPlugin();
 
     //TODO typesafty and stuff, because prob the server will more or less crash when config.yml is not correctly configured
@@ -22,12 +22,12 @@ public final class TagPresets {
             String presetPermission = (String) preset.get("permission");
             int presetPriority = (int) preset.get("priority");
             if ( presetName != null ) {
-                tagHashTable.put(presetName, new Preset(presetName, presetComponent, presetPermission, presetPriority));
+                tagHashTable.put(presetName, new TagPreset(presetName, presetComponent, presetPermission, presetPriority));
             }
         }
     }
 
-    public static Preset valueOf(String presetName) {
+    public static TagPreset valueOf(String presetName) {
         return tagHashTable.get(presetName);
     }
 

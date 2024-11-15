@@ -22,6 +22,8 @@ public class PlayerTagClearCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
+        //TODO also clear custom tag
+
         CommandSourceStack stack = (CommandSourceStack) context.getSource();
         CommandSender sender     = stack.getSender();
 

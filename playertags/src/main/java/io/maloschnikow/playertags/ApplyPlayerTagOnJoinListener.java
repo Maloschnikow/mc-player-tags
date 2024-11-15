@@ -26,6 +26,9 @@ public class ApplyPlayerTagOnJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+
+        //TODO also apply custom tag
+
         Player player = event.getPlayer();
         GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
 
@@ -42,9 +45,9 @@ public class ApplyPlayerTagOnJoinListener implements Listener {
         }
 
         //Serialize tags
-        TreeSet<Preset> playerTags = new TreeSet<>(); //TreeSet sorts automatically and values are unique
+        TreeSet<TagPreset> playerTags = new TreeSet<>(); //TreeSet sorts automatically and values are unique
         for (String tagString : playerTagStringList) {
-            Preset tag = Preset.serialize(tagString);
+            TagPreset tag = TagPreset.serialize(tagString);
             playerTags.add(tag);
         }
 
@@ -76,7 +79,7 @@ public class ApplyPlayerTagOnJoinListener implements Listener {
 
         //Construct display name
         Component displayName = gsonComponentSerializer.deserialize(tagStartChar); //Begin with tag start char
-        List<Preset> playerTagsList = new ArrayList<Preset>(playerTags);
+        List<TagPreset> playerTagsList = new ArrayList<TagPreset>(playerTags);
 
 
         //Construct display name with multiple player tags

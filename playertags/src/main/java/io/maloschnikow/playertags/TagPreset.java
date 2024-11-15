@@ -3,7 +3,7 @@ package io.maloschnikow.playertags;
 import java.util.Arrays;
 import java.util.List;
 
-public class Preset implements Comparable<Preset> {
+public class TagPreset implements Comparable<TagPreset> {
 
     //TODO make serialize
 
@@ -12,7 +12,7 @@ public class Preset implements Comparable<Preset> {
     private final String permission;
     private final int priotity;
 
-    public Preset(String name, String tagComponentString, String permission, int priotity) {
+    public TagPreset(String name, String tagComponentString, String permission, int priotity) {
         this.name = name;
         this.tagComponentString = tagComponentString;
         this.permission = permission;
@@ -32,11 +32,11 @@ public class Preset implements Comparable<Preset> {
         return priotity;
     }
 
-    public static String deserialize (Preset preset) {
+    public static String deserialize (TagPreset preset) {
         return "\\{" + preset.name + "\\," + preset.tagComponentString + "\\," + preset.permission + "\\," + String.valueOf(preset.priotity) + "\\}";
     }
 
-    public static Preset serialize(String presetString) {
+    public static TagPreset serialize(String presetString) {
         presetString = presetString.replace("\\{", "").replace("\\}", "");
         List<String> list = Arrays.asList(presetString.split("\\\\,")); //need to be 4 because of regex things
 
@@ -46,11 +46,11 @@ public class Preset implements Comparable<Preset> {
 
         int priority = Integer.parseInt(list.get(3));
 
-        return new Preset(name, tagComponentString, permission, priority);
+        return new TagPreset(name, tagComponentString, permission, priority);
     }
 
     @Override
-    public int compareTo(Preset other) {
+    public int compareTo(TagPreset other) {
         return Integer.compare(this.priotity, other.priotity);
     }
 }
