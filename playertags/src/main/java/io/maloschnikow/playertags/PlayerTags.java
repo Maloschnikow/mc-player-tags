@@ -80,6 +80,21 @@ public class PlayerTags extends JavaPlugin {
                 .build(),
                 "Apply a tag to a player."
             );
+
+            // Register /playertagremove command
+            commands.register(
+                Commands.literal("playertagremove")
+                .then(
+                    Commands.argument("player", ArgumentTypes.player())
+                    .then(
+                        Commands.argument("tag", new TagPresetsArgument())
+                        .executes(new PlayerTagRemoveCommand())
+                    )
+                )
+                .build(),
+                //TODO removing playertag permission (but should this require a permission?)
+                "Apply a tag to a player."
+            );
         });
     }
 

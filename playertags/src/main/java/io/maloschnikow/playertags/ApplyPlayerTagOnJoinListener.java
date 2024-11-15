@@ -42,10 +42,18 @@ public class ApplyPlayerTagOnJoinListener implements Listener {
         }
 
         //Serialize tags
-        TreeSet<Preset> playerTags = new TreeSet<Preset>(); //TreeSet sorts automatically and values are unique
+        TreeSet<Preset> playerTags = new TreeSet<>(); //TreeSet sorts automatically and values are unique
         for (String tagString : playerTagStringList) {
             Preset tag = Preset.serialize(tagString);
             playerTags.add(tag);
+        }
+
+        //check if playerTags are empty and reset display and list name
+        if (playerTags.isEmpty()) {
+            player.displayName(null);
+            player.playerListName(null);
+            playerDataContainer.remove(new NamespacedKey(plugin, "playerTagList"));
+            return;
         }
 
         //Get tag start, sepeator and end characters from config
