@@ -45,10 +45,7 @@ public class PlayerArgument implements CustomArgumentType.Converted<Player, Stri
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 
-        for (OfflinePlayer offlinePlayer : PlayerTags.getPlugin().getServer().getOfflinePlayers()) {
-
-            Player player = (Player) offlinePlayer;
-            
+        for (Player player : PlayerTags.getPlugin().getServer().getOnlinePlayers()) {
             builder.suggest(player.getName(), MessageComponentSerializer.message().serialize(player.displayName()));
         }
         // Rückgabe der Vorschläge
