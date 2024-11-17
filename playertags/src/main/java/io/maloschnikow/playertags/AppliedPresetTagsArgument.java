@@ -30,7 +30,7 @@ public class AppliedPresetTagsArgument implements CustomArgumentType.Converted<T
         try {
             return l.valueOf(nativeType); //TODO change (player can have tag, that does'nt exists in config anymore)
         } catch (IllegalArgumentException ignored) {
-            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid flavor %s!".formatted(nativeType), NamedTextColor.RED));
+            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid tag \"%s\"".formatted(nativeType), NamedTextColor.RED));
 
             throw new CommandSyntaxException(new SimpleCommandExceptionType(message), message);
         }

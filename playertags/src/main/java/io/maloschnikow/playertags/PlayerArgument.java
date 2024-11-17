@@ -25,9 +25,13 @@ public class PlayerArgument implements CustomArgumentType.Converted<Player, Stri
     @Override
     public @NotNull Player convert(String nativeType) throws CommandSyntaxException {
         try {
-            return PlayerTags.getPlugin().getServer().getPlayer(nativeType);
+            Player r = PlayerTags.getPlugin().getServer().getPlayer(nativeType);
+            if( r == null) {
+                throw new IllegalArgumentException(nativeType + " doesn't exists");
+            }
+            return r;
         } catch (IllegalArgumentException ignored) {
-            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid flavor %s!".formatted(nativeType), NamedTextColor.RED));
+            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid player \"%s\"".formatted(nativeType), NamedTextColor.RED));
 
             throw new CommandSyntaxException(new SimpleCommandExceptionType(message), message);
         }
@@ -41,8 +45,11 @@ public class PlayerArgument implements CustomArgumentType.Converted<Player, Stri
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 
-        for (OfflinePlayer player : PlayerTags.getPlugin().getServer().getOfflinePlayers()) {
-            builder.suggest(player.getName(), MessageComponentSerializer.message().serialize(Component.text("Choose a preset tag!", NamedTextColor.YELLOW)));
+        for (OfflinePlayer offlinePlayer : PlayerTags.getPlugin().getServer().getOfflinePlayers()) {
+
+            Player player = (Player) offlinePlayer;
+            
+            builder.suggest(player.getName(), MessageComponentSerializer.message().serialize(player.displayName()));
         }
         // Rückgabe der Vorschläge
         return builder.buildFuture();

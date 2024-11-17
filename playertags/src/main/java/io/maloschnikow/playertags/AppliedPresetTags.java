@@ -21,6 +21,10 @@ public class AppliedPresetTags {
     }
 
     public TagPreset valueOf(String presetName) {
+        TagPreset r = tagHashTable.get(presetName);
+        if( r == null)  {
+            throw new IllegalArgumentException("A preset tag named " + presetName + " doesn't exists");
+        }
         return tagHashTable.get(presetName);
     }
 

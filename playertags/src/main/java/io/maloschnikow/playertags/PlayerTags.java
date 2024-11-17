@@ -52,6 +52,12 @@ public class PlayerTags extends JavaPlugin {
             return player.displayName();
         }
 
+        //add custom tag if player has one and add it as last element in list
+        if(customTagPreset != null) {
+            playerTags.add(customTagPreset);
+        }
+
+
         //Get tag start, sepeator and end characters from config
         String tagStartChar     = plugin.getConfig().getString("tag-start-char", "{\"text\":\"[\",\"color\":\"gray\",\"bold\":false}");
         String tagEndChar       = plugin.getConfig().getString("tag-end-char",     "{\"text\":\"]\",\"color\":\"gray\",\"bold\":false}");
@@ -74,11 +80,6 @@ public class PlayerTags extends JavaPlugin {
         Component displayName = gsonComponentSerializer.deserialize(tagStartChar); //Begin with tag start char
         List<TagPreset> playerTagsList = new ArrayList<TagPreset>(playerTags);
         
-        //add custom tag if player has one and add it as last element in list
-        if(customTagPreset != null) {
-            playerTagsList.add(customTagPreset);
-        }
-
         //Construct display name with multiple player tags
         if( displayMultipleTags ) {
             for (int i = 0; i < playerTagsList.size(); ++i) {
