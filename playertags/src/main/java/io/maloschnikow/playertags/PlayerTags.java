@@ -226,7 +226,7 @@ public class PlayerTags extends JavaPlugin {
             commands.register(
                 Commands.literal("playertag")
                 .then(
-                    Commands.argument("player", ArgumentTypes.player()) //player argument
+                    Commands.argument("player", new PlayerArgument()) //player argument
                     .then(
                         Commands.literal("add") //tag should be added
                         .then(
@@ -245,15 +245,14 @@ public class PlayerTags extends JavaPlugin {
                                 )
                             )
                         )
-                        
                     )
                     .then(
                         Commands.literal("remove") //tag should be removed
                         .then(
                             Commands.literal("preset") //a preset tag should be removed
                             .then(
-                                Commands.argument("tag", new TagPresetsArgument()) //TODO make a argument type that suggests the player's tags
-                                .executes(new PresetPlayerTagRemoveCommand()) 
+                                Commands.argument("tag", new AppliedPresetTagsArgument())
+                                .executes(new PresetPlayerTagRemoveCommand())
                             )
                         )
                         .then(

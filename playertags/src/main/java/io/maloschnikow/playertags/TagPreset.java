@@ -5,8 +5,6 @@ import java.util.List;
 
 public class TagPreset implements Comparable<TagPreset> {
 
-    //TODO make serialize
-
     private final String name;
     private final String tagComponentString;
     private final String permission;

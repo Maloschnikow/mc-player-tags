@@ -9,7 +9,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -34,8 +33,7 @@ public class CustomPlayerTagAddCommand implements Command<CommandSourceStack> {
         CommandSender sender     = stack.getSender();
 
         //get targetPlayer argument
-        PlayerSelectorArgumentResolver playerResolver = context.getArgument("player", PlayerSelectorArgumentResolver.class); 
-        Player targetPlayer = playerResolver.resolve(stack).getFirst();
+        Player targetPlayer = context.getArgument("player", Player.class); 
 
         //get text argument (text which is displayed as tag)
         String tagText = context.getArgument("text", String.class);

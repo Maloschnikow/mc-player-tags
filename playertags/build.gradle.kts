@@ -9,7 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
-    id("io.papermc.paperweight.userdev") version "1.7.3"
+    id("io.papermc.paperweight.userdev") version "1.7.4"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
@@ -35,7 +35,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass.set("io.maloschnikow.playertags.SpawnCMDPlugin")
+    mainClass.set("io.maloschnikow.playertags.PlayerTags")
 }
 
 /* tasks.named<Test>("test") {

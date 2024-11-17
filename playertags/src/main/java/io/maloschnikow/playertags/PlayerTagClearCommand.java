@@ -12,8 +12,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
-
 
 public class PlayerTagClearCommand implements Command<CommandSourceStack> {
 
@@ -28,8 +26,7 @@ public class PlayerTagClearCommand implements Command<CommandSourceStack> {
         CommandSender sender     = stack.getSender();
 
         //get targetPlayer argument
-        PlayerSelectorArgumentResolver playerResolver = context.getArgument("player", PlayerSelectorArgumentResolver.class); 
-        Player targetPlayer = playerResolver.resolve(stack).getFirst();
+        Player targetPlayer = context.getArgument("player", Player.class); 
         
         //check is sender is player
         if ( sender instanceof Player) {

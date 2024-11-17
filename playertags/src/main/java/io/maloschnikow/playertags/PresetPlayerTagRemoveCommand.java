@@ -9,7 +9,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 
 
 public class PresetPlayerTagRemoveCommand implements Command<CommandSourceStack> {
@@ -24,9 +23,7 @@ public class PresetPlayerTagRemoveCommand implements Command<CommandSourceStack>
         TagPreset preset = context.getArgument("tag", TagPreset.class);
 
         //get targetPlayer argument
-        PlayerSelectorArgumentResolver playerResolver = context.getArgument("player", PlayerSelectorArgumentResolver.class); 
-        Player targetPlayer = playerResolver.resolve(stack).getFirst();
-
+        Player targetPlayer = context.getArgument("player", Player.class); 
         
         //check if sender is player
         if ( sender instanceof Player) {
