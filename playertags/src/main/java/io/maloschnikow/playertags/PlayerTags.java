@@ -42,8 +42,11 @@ public class PlayerTags extends JavaPlugin {
         //get tags, which are already stored in player
         TreeSet<TagPreset> playerTags = getPresetPlayerTags(player); //TreeSet sorts automatically and values are unique
 
+        //get custom player tag
+        TagPreset customTagPreset = getCustomPlayerTag(player);
+
         //reset players display name and list name, if they have no tags stored
-        if(playerTags.isEmpty()) {
+        if(playerTags.isEmpty() && customTagPreset == null) {
             player.displayName(null);
             player.playerListName(null);
             return player.displayName();
@@ -70,7 +73,11 @@ public class PlayerTags extends JavaPlugin {
         //Construct display name
         Component displayName = gsonComponentSerializer.deserialize(tagStartChar); //Begin with tag start char
         List<TagPreset> playerTagsList = new ArrayList<TagPreset>(playerTags);
-
+        
+        //add custom tag if player has one and add it as last element in list
+        if(customTagPreset != null) {
+            playerTagsList.add(customTagPreset);
+        }
 
         //Construct display name with multiple player tags
         if( displayMultipleTags ) {
@@ -85,7 +92,6 @@ public class PlayerTags extends JavaPlugin {
         } else {
             displayName = displayName.append( gsonComponentSerializer.deserialize(playerTags.first().getTagComponentString()) ); // set first of playerTags (should be the one with highest priority, because of TreeSet)
         }
-        //TODO append custom tag
 
         displayName = displayName.append(gsonComponentSerializer.deserialize(tagEndChar)); //End with tag end char
         displayName = displayName.append(playerNameAsTextComponent);
@@ -205,6 +211,27 @@ public class PlayerTags extends JavaPlugin {
         }
     }
 
+    public static TagPreset getCustomPlayerTag(Player player) {
+        PersistentDataContainer playerDataContainer = player.getPersistentDataContainer();
+        String tagPresetString = playerDataContainer.get(new NamespacedKey(PlayerTags.getPlugin(), "customTag"), PersistentDataType.STRING);
+        if( tagPresetString == null ) { return null; }
+        return TagPreset.serialize(tagPresetString);
+    }
+
+    public static void setCustomPlayerTag(Player player, TagPreset customTagPreset) {
+        PersistentDataContainer playerDataContainer = player.getPersistentDataContainer();
+        playerDataContainer.set(new NamespacedKey(PlayerTags.getPlugin(), "customTag"), PersistentDataType.STRING, TagPreset.deserialize(customTagPreset));
+    }
+
+    public static boolean removeCustomPlayerTag(Player player) {
+        PersistentDataContainer playerDataContainer = player.getPersistentDataContainer();
+        if(!playerDataContainer.has(new NamespacedKey(PlayerTags.getPlugin(), "customTag"))) {
+            return false;
+        }
+        playerDataContainer.remove(new NamespacedKey(PlayerTags.getPlugin(), "customTag"));
+        return true;
+    }
+
 
     @Override
     public void onEnable() {
@@ -232,7 +259,7 @@ public class PlayerTags extends JavaPlugin {
                         .then(
                             Commands.literal("preset") //a preset tag should be added
                             .then(
-                                Commands.argument("tag", new TagPresetsArgument())
+                                Commands.argument("tag", new AvailableTagPresetsArgument())
                                 .executes(new PresetPlayerTagAddCommand())
                             )
                         )
@@ -242,6 +269,7 @@ public class PlayerTags extends JavaPlugin {
                                 Commands.argument("text", StringArgumentType.string())
                                 .then(
                                     Commands.argument("color", ArgumentTypes.namedColor())
+                                    .executes(new CustomPlayerTagAddCommand())
                                 )
                             )
                         )
@@ -266,7 +294,7 @@ public class PlayerTags extends JavaPlugin {
                     )
                 )
                 .build(),
-                //TODO removing playertag permission (but should this require a permission?)
+                //TODO make a "removePlayerTag" permission (but should this require a permission?)
                 "(experimental) Apply a tag to a player."
             );
 

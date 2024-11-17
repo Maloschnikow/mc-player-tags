@@ -2,7 +2,6 @@ package io.maloschnikow.playertags;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
@@ -32,7 +31,7 @@ public class PresetPlayerTagRemoveCommand implements Command<CommandSourceStack>
             //check if command executer is different than targetPlayer
             //check if they have permission to change other peoples tag
             if (executer.getUniqueId() != targetPlayer.getUniqueId()) {
-                if (!executer.hasPermission( new Permission("permissions.setOtherPlayerTag") )) {
+                if (!executer.hasPermission("permissions.setOtherPlayerTag")) {
                     executer.sendMessage("You can not set another player's tag");
                     return Command.SINGLE_SUCCESS;
                 }

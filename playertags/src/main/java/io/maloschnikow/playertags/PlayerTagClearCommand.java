@@ -3,7 +3,6 @@ package io.maloschnikow.playertags;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 
@@ -20,8 +19,6 @@ public class PlayerTagClearCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
-        //TODO also clear custom tag
-
         CommandSourceStack stack = (CommandSourceStack) context.getSource();
         CommandSender sender     = stack.getSender();
 
@@ -35,7 +32,7 @@ public class PlayerTagClearCommand implements Command<CommandSourceStack> {
             //check if command executer is different than targetPlayer
             //check if they have permission to change other peoples tag
             if (executer.getUniqueId() != targetPlayer.getUniqueId()) {
-                if (!executer.hasPermission( new Permission("permissions.setOtherPlayerTag") )) {
+                if (!executer.hasPermission("permissions.setOtherPlayerTag")) {
                     executer.sendMessage("You can not set another player's tag");
                     return Command.SINGLE_SUCCESS;
                 }
@@ -49,9 +46,10 @@ public class PlayerTagClearCommand implements Command<CommandSourceStack> {
         //remove all stored tags
         PersistentDataContainer targetPlayerDataContainer = targetPlayer.getPersistentDataContainer();
         targetPlayerDataContainer.remove(new NamespacedKey(plugin, "playerTagList"));
+        PlayerTags.removeCustomPlayerTag(targetPlayer);
 
-        //send success message to command sender
-        targetPlayer.sendMessage(targetPlayer.getName() + "'s tags were removed.");
+        //send success message
+        PlayerTags.sendVerificationMessage(sender, targetPlayer);
 
         return Command.SINGLE_SUCCESS;
     }

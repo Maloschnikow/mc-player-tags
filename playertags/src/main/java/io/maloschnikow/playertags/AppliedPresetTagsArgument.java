@@ -18,6 +18,7 @@ import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 public class AppliedPresetTagsArgument implements CustomArgumentType.Converted<TagPreset, String> {
     
@@ -54,9 +55,12 @@ public class AppliedPresetTagsArgument implements CustomArgumentType.Converted<T
             AppliedPresetTags appliedPresetTags = new AppliedPresetTags(player);
             l = appliedPresetTags;
 
+            GsonComponentSerializer gson = GsonComponentSerializer.gson();
+
             for (String flavorKey : appliedPresetTags.values()) {
                 String flavorName = appliedPresetTags.valueOf(flavorKey).getName();
-                builder.suggest(flavorName, MessageComponentSerializer.message().serialize(Component.text("Choose a preset tag!", NamedTextColor.YELLOW)));
+                Component preview = gson.deserialize(AvailableTagPresets.valueOf(flavorKey).getTagComponentString());
+                builder.suggest(flavorName, MessageComponentSerializer.message().serialize(preview));
             }
 
         } catch (IllegalArgumentException e) {

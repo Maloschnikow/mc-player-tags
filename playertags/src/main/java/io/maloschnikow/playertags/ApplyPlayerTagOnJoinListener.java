@@ -10,8 +10,6 @@ public class ApplyPlayerTagOnJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
-        //TODO also apply custom tag
-
         Player player = event.getPlayer();
         PlayerTags.applyPlayerTags(player);
     }

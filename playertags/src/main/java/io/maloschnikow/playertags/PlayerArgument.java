@@ -25,7 +25,7 @@ public class PlayerArgument implements CustomArgumentType.Converted<Player, Stri
     @Override
     public @NotNull Player convert(String nativeType) throws CommandSyntaxException {
         try {
-            return PlayerTags.getPlugin().getServer().getPlayer(nativeType); //TODO change (player can have tag, that does'nt exists in config anymore)
+            return PlayerTags.getPlugin().getServer().getPlayer(nativeType);
         } catch (IllegalArgumentException ignored) {
             Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid flavor %s!".formatted(nativeType), NamedTextColor.RED));
 

@@ -1,5 +1,5 @@
 name: playertags
-version: 0.0.1
+version: 1.0.0
 main: io.maloschnikow.playertags.PlayerTags
 description: Adds a player tags.
 author: Maloschnikow

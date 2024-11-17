@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 public class AppliedPresetTags {
     public Hashtable<String, TagPreset> tagHashTable = new Hashtable<String, TagPreset>();;
 
-    //TODO typesafty and stuff, because prob the server will more or less crash when config.yml is not correctly configured
-
     public AppliedPresetTags() {
     }
 

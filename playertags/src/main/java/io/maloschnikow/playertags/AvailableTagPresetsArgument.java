@@ -17,8 +17,9 @@ import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
-public class TagPresetsArgument implements CustomArgumentType.Converted<TagPreset, String> {
+public class AvailableTagPresetsArgument implements CustomArgumentType.Converted<TagPreset, String> {
 
     @Override
     public @NotNull TagPreset convert(String nativeType) throws CommandSyntaxException {
@@ -38,9 +39,13 @@ public class TagPresetsArgument implements CustomArgumentType.Converted<TagPrese
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+
+        GsonComponentSerializer gson = GsonComponentSerializer.gson();
+
         for (String flavorKey : AvailableTagPresets.values()) {
             String flavorName = AvailableTagPresets.valueOf(flavorKey).getName();
-            builder.suggest(flavorName, MessageComponentSerializer.message().serialize(Component.text("Chose a preset tag!", NamedTextColor.YELLOW)));
+            Component preview = gson.deserialize(AvailableTagPresets.valueOf(flavorKey).getTagComponentString());
+            builder.suggest(flavorName, MessageComponentSerializer.message().serialize(preview));
         }
 
         return builder.buildFuture();

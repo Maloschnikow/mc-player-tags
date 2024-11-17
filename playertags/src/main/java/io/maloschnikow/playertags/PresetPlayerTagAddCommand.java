@@ -30,7 +30,7 @@ public class PresetPlayerTagAddCommand implements Command<CommandSourceStack> {
             Player executer = (Player) sender;
 
             //check is targetPlayer has permission to use the tag
-            if ( !requiredPermission.isBlank() && !requiredPermission.contains("none") && !executer.hasPermission(new Permission(requiredPermission))){
+            if ( !requiredPermission.isBlank() && !requiredPermission.contains("none") && !executer.hasPermission(requiredPermission)){
                 executer.sendMessage(targetPlayer.getName() + " doesn't have permission to use this tag.");
                 return Command.SINGLE_SUCCESS;
             }
