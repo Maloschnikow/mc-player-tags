@@ -9,7 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
-    id("io.papermc.paperweight.userdev") version "1.7.4"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.12"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
@@ -29,7 +29,7 @@ dependencies {
     // This dependency is used by the application.
     //implementation("com.google.guava:guava:31.1-jre")
 
-    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     //compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 }
 
@@ -59,7 +59,7 @@ tasks {
       // Configure the Minecraft version for our task.
       // This is the only required configuration besides applying the plugin.
       // Your plugin's jar (or shadowJar if present) will be used automatically.
-      minecraftVersion("1.21.1")
+      minecraftVersion("1.21.4")
     }
   }
 

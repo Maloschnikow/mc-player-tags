@@ -11,7 +11,7 @@ public final class AvailableTagPresets {
     public static Hashtable<String, TagPreset> tagHashTable = new Hashtable<String, TagPreset>();;
     public static Plugin plugin = PlayerTags.getPlugin();
 
-    //TODO typesafty and stuff, because prob the server will more or less crash when config.yml is not correctly configured
+    //TODO typesafety and stuff, because prob the server will more or less crash when config.yml is not correctly configured
 
     public static void loadPresetsFromConfig() {
         List<LinkedHashMap<?, ?>> presetList = (List<LinkedHashMap<?, ?>>) plugin.getConfig().getList("preset-player-tags");

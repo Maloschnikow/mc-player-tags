@@ -1,13 +1,14 @@
 name: playertags
-version: 1.0.2
+version: 1.0.3
 main: io.maloschnikow.playertags.PlayerTags
-description: Adds a player tags.
+description: Players can add tags to make their names appear prettier.
 author: Maloschnikow
-api-version: '1.21.1'
+website: https://github.com/Maloschnikow/mc-player-tags
+api-version: '1.21.4'
 
 permissions:
 
-  permissions.setPlayerTag:
+  permissions.PlayerTag:
     description: "Allows someone to apply a tag command. (/playertag)"
     default: true
 

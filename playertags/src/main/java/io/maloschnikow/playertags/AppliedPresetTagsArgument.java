@@ -21,16 +21,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 public class AppliedPresetTagsArgument implements CustomArgumentType.Converted<TagPreset, String> {
-    
-    private AppliedPresetTags l = new AppliedPresetTags(); //TODO might not work for multiple players
 
     @Override
     public @NotNull TagPreset convert(String nativeType) throws CommandSyntaxException {
         
         try {
-            return l.valueOf(nativeType); //TODO change (player can have tag, that does'nt exists in config anymore)
+            return AvailableTagPresets.valueOf(nativeType);
         } catch (IllegalArgumentException ignored) {
-            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid tag \"%s\"".formatted(nativeType), NamedTextColor.RED));
+            Message message = MessageComponentSerializer.message().serialize(Component.text("Invalid tag \"%s\". Was the tag removed from the config file?".formatted(nativeType), NamedTextColor.RED));
 
             throw new CommandSyntaxException(new SimpleCommandExceptionType(message), message);
         }
@@ -53,22 +51,24 @@ public class AppliedPresetTagsArgument implements CustomArgumentType.Converted<T
 
             // suggest tags the player already has
             AppliedPresetTags appliedPresetTags = new AppliedPresetTags(player);
-            l = appliedPresetTags;
-
             GsonComponentSerializer gson = GsonComponentSerializer.gson();
 
             for (String flavorKey : appliedPresetTags.values()) {
+
+                PlayerTags.getPlugin().getLogger().info(flavorKey);
+
                 String flavorName = appliedPresetTags.valueOf(flavorKey).getName();
-                Component preview = gson.deserialize(AvailableTagPresets.valueOf(flavorKey).getTagComponentString());
+                Component preview = gson.deserialize(appliedPresetTags.valueOf(flavorKey).getTagComponentString());
+
                 builder.suggest(flavorName, MessageComponentSerializer.message().serialize(preview));
             }
 
         } catch (IllegalArgumentException e) {
-            // Wenn ein Fehler auftritt, loggen wir diesen
+            // Log occuring errors
             PlayerTags.getPlugin().getLogger().info(e.getMessage());
         }
 
-        // Rückgabe der Vorschläge
+        // return suggestions
         return builder.buildFuture();
     }
 

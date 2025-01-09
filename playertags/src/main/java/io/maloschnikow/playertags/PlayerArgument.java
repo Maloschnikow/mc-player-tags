@@ -2,7 +2,6 @@ package io.maloschnikow.playertags;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

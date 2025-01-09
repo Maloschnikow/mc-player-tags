@@ -252,20 +252,30 @@ public class PlayerTags extends JavaPlugin {
 
             // Register /playertag command
             commands.register(
-                Commands.literal("playertag")
+                Commands.literal("playertag").requires(new Permission("permissions.PlayerTag"))
                 .then(
                     Commands.argument("player", new PlayerArgument()) //player argument
                     .then(
-                        Commands.literal("add") //tag should be added
+                        Commands.literal("preset") //tag should be added
                         .then(
-                            Commands.literal("preset") //a preset tag should be added
+                            Commands.literal("add") //a preset tag should be added
                             .then(
                                 Commands.argument("tag", new AvailableTagPresetsArgument())
                                 .executes(new PresetPlayerTagAddCommand())
                             )
                         )
                         .then(
-                            Commands.literal("custom") //a custom tag should be added
+                            Commands.literal("remove") //a custom tag should be added
+                            .then(
+                                Commands.argument("tag", new AppliedPresetTagsArgument())
+                                .executes(new PresetPlayerTagRemoveCommand())
+                            )
+                        )
+                    )
+                    .then(
+                        Commands.literal("custom") //tag should be removed
+                        .then(
+                            Commands.literal("set") //a preset tag should be removed
                             .then(
                                 Commands.argument("text", StringArgumentType.string())
                                 .then(
@@ -274,29 +284,19 @@ public class PlayerTags extends JavaPlugin {
                                 )
                             )
                         )
-                    )
-                    .then(
-                        Commands.literal("remove") //tag should be removed
                         .then(
-                            Commands.literal("preset") //a preset tag should be removed
-                            .then(
-                                Commands.argument("tag", new AppliedPresetTagsArgument())
-                                .executes(new PresetPlayerTagRemoveCommand())
-                            )
-                        )
-                        .then(
-                            Commands.literal("custom") //the custom tag should be removed
+                            Commands.literal("remove") //the custom tag should be removed
                             .executes(new CustomPlayerTagRemoveCommand())
                         )
                     )
                     .then(
                         Commands.literal("clear")
                         .executes(new PlayerTagClearCommand())
+                        .requires(new Permission("permissions.clearPlayerTag"))
                     )
                 )
                 .build(),
-                //TODO make a "removePlayerTag" permission (but should this require a permission?)
-                "(experimental) Apply a tag to a player."
+                "Manipulate a player's tags."
             );
 
         });
